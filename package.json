@@ -13,6 +13,7 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.3.4",
+    "eth-sig-util": "^3.0.1",
     "ethereumjs-abi": "^0.6.8",
     "ethereumjs-util": "^7.0.9",
     "ganache-cli": "^6.12.2",
