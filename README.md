@@ -24,6 +24,9 @@ To generate the offchain signature using metamask instead, use this method:
 
 
 #### Commands: 
+    nvm install 14 (requires node14)
+    nvm use 14
+
     npm install 
     npm run build 
 
