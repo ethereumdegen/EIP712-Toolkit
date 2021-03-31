@@ -25,6 +25,10 @@ function start(){
 }
 
 function generateSolidityFile(){
+
+    let customConfigJSON = fs.readFileSync(path.join('eip712-config.json'));
+    let customConfig = JSON.parse(customConfigJSON)
+
     let sampleEcRecoverContract = GenerationHelper.getECRecoveryContract()
 
 
@@ -32,7 +36,13 @@ function generateSolidityFile(){
 
     outputData = outputData.concat(sampleEcRecoverContract)
     outputData = outputData.concat('\n\n\n\n')
-   /// outputData = outputData.concat(sampleEcRecoverContract)
+
+    outputData = outputData.concat(`Contract MyFirstContract is ECRecovery {`)
+    outputData = outputData.concat('\n\n')
+     outputData = outputData.concat(GenerationHelper.getCustomStruct( customConfig ) )
+
+   outputData = outputData.concat('\n\n')
+   outputData = outputData.concat(`}`)///end contract
 
 
     const contractLookupPath = path.join( './generated/soliditySample.sol' )
