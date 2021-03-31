@@ -27,6 +27,10 @@ function start(){
     let customConfigJSON = fs.readFileSync(path.join('eip712-config.json'));
     let customConfig = JSON.parse(customConfigJSON)
 
+
+      /*
+      MAKE SURE YOU CHANGE THIS VARIABLE IF YOU MODIFY eip712-config.json!!!
+      */     
     let dataValues = {
         customName:"myName",
         bidderAddress:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
@@ -53,12 +57,12 @@ function start(){
 
    console.log('typedData',typedData)
 
-    var stringifiedData = JSON.stringify(  typedData );
+    //var stringifiedData =  (  typedData );
 
     
-    let typedDatahash = EIP712Utils.getTypedDataHash(typedData)
+     let typedDatahash = EIP712Utils.getTypedDataHash(typedData)
 
-    console.log('typedDatahash',typedDatahash)
+     console.log('typedDatahash',typedDatahash)
 
 
 }

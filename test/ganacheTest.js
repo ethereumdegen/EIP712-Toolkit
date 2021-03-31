@@ -58,6 +58,10 @@ describe("EIP712 Contract Testing", function() {
       console.log("deployed contract at ", contractAddress)
 
 
+
+      /*
+      MAKE SURE YOU CHANGE THIS VARIABLE IF YOU MODIFY eip712-config.json!!!
+      */
       let dataValues = {
         customName:"myName",
         bidderAddress: primaryAccountAddress,
@@ -68,6 +72,8 @@ describe("EIP712 Contract Testing", function() {
         projectId:123,
         expires:50000 
     }
+
+
 
     console.log('chainId', chainId)
 
