@@ -1,0 +1,14 @@
+{   "contractName":"MyFirstContract",
+    "version":"1",
+    "primaryType":"BidPacket",
+    "entries":{
+        "bidderAddress":"address",
+        "nftContractAddress":"address",
+        "currencyTokenAddress":"address",
+        "currencyTokenAmount":"uint256",
+        "requireProjectId":"bool",
+        "projectId":"uint256",
+        "expires":"uint256"
+     }
+}
+ 

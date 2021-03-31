@@ -1,0 +1,12 @@
+{
+  "name": "eip712-toolkit",
+  "version": "0.10.0",
+  "description": "A toolkit for web3 code related to EIP712 ",
+  "main": "index.js",
+  "scripts": {
+    "build": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "admazzola",
+  "license": "MIT"
+}
