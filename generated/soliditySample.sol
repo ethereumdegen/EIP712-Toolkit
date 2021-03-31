@@ -95,7 +95,7 @@ function getEIP712DomainHash(string memory contractName, string memory version, 
 }
 
 bytes32 constant PACKET_TYPEHASH = keccak256(
-"BidPacket(string memory customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires)"
+"BidPacket(string customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires)"
 );
         
 function getPacketTypehash()  public pure returns (bytes32) {
