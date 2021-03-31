@@ -12,3 +12,7 @@ Use the Helper and Utils libraries along with your eip712-config.json file in yo
 #### Commands: 
     npm install 
     npm run build 
+
+
+    npm run compile 
+    npm run test 
