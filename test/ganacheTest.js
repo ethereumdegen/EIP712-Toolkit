@@ -7,11 +7,10 @@ import  Web3 from 'web3'
 
 import ethUtil from 'ethereumjs-util'
 
-
-
-import GenerationHelper from '../lib/GenerationHelper.js' 
+ 
 import EIP712Utils from '../lib/EIP712Utils.js'
 
+import EIP712Helper from '../lib/EIP712Helper.js'
 
 let testAccount = {
   publicAddress: '0x95eDA452256C1190947f9ba1fD19422f0120858a',
@@ -79,7 +78,7 @@ describe("EIP712 Contract Testing", function() {
       dataValues  
     )
 
-    console.log('typedData',typedData)
+    console.log('typedData', (typedData))
     let typedDatahash = EIP712Utils.getTypedDataHash(typedData) 
 
      
@@ -105,7 +104,12 @@ describe("EIP712 Contract Testing", function() {
     //let signature = EIP712Utils.signTypedData(privKey,typedData ) 
 
 
-    const sig = ethUtil.ecsign( ethUtil.keccak256(Buffer.from(typedDatahash)  ), privKey );
+    
+
+
+
+
+    const sig = ethUtil.ecsign( typedDatahash   , privKey );
     //const sig = ethUtil.ecsign( typedDatahash , privKey );
     var signature = ethUtil.toRpcSig(sig.v, sig.r, sig.s);
     //this signatre is wrong 
