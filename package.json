@@ -6,14 +6,20 @@
   "type": "module",
   "scripts": {
     "build": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "node tasks/compileSolidity.js",
+    "test": "mocha ./test/ganacheTest.js"
   },
   "author": "admazzola",
   "license": "MIT",
   "devDependencies": {
+    "chai": "^4.3.4",
     "ethereumjs-abi": "^0.6.8",
     "ethereumjs-util": "^7.0.9",
+    "ganache-cli": "^6.12.2",
     "json-beautify": "^1.1.1",
+    "mocha": "^8.3.2",
+    "solc": "^0.5.17",
+    "web3": "^1.3.4",
     "web3-utils": "^1.3.4"
   }
 }

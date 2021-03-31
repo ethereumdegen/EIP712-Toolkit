@@ -109,7 +109,7 @@ function generateSolidityFile(){
     outputData = outputData.concat(`}`)///end contract
 
 
-    const contractLookupPath = path.join( './generated/soliditySample.sol' )
+    const contractLookupPath = path.join( './generated/contracts/soliditySample.sol' )
 
     fs.writeFile(contractLookupPath, outputData , (err) => {
         if (err) {
