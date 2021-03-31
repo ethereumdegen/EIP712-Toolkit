@@ -1,18 +1,13 @@
 
 
 import  fs   from 'fs';
-import beautify from "json-beautify";
+ 
 
 import path from 'path';
 
 import GenerationHelper from './lib/GenerationHelper.js' 
 import EIP712Utils from './lib/EIP712Utils.js' 
-/*
-
-    let contractDataJSON = fs.readFileSync(path.join('src/config/contractdata.json'));
-    let contractData = JSON.parse(contractDataJSON)
-
-*/
+ 
 
 function start(){
 
@@ -119,9 +114,7 @@ function generateSolidityFile(){
         if (err) {
             throw err;
         }
-
-
-    //      console.log('rebuilt world data in ', Date.now() - startTime, 'ms')
+ 
     });
 
 

@@ -1,4 +1,4 @@
-import { expect } from 'chai' 
+ 
 import fs from 'fs'
 import path from 'path'
 
@@ -106,19 +106,13 @@ describe("EIP712 Contract Testing", function() {
     var privateKey = testAccount.secretKey;
     var privKey = Buffer.from(privateKey.substring(2), 'hex')
  
-    
-    //let signature = EIP712Utils.signTypedData(privKey,typedData ) 
-
-
-    
-
-
+     
 
 
     const sig = ethUtil.ecsign( typedDatahash   , privKey );
-    //const sig = ethUtil.ecsign( typedDatahash , privKey );
+ 
     var signature = ethUtil.toRpcSig(sig.v, sig.r, sig.s);
-    //this signatre is wrong 
+    
 
 
     let recoveredSigner = EIP712Utils.recoverPacketSigner(typedData, signature)
