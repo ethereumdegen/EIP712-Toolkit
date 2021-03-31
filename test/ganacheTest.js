@@ -98,6 +98,8 @@ describe("EIP712 Contract Testing", function() {
 
      let signResult = await  EIP712Helper.signTypedData( web3, from, JSON.stringify(typedDatahash)  )
          
+  
+     For this test only, the signature will be calculated from the pkey
     */
 
 
