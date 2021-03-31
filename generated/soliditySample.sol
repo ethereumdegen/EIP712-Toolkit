@@ -1,3 +1,7 @@
+pragma solidity ^0.5.17;
+
+
+
 
         
 
@@ -46,9 +50,20 @@
 
 
 
-Contract MyFirstContract is ECRecovery {
+contract MyFirstContract is ECRecovery {
 
-struct Packet { 
+
+uint256 _chain_id;
+        
+constructor( uint chainId) public { 
+_chain_id = chainId;
+}       
+        
+        
+        
+
+struct BidPacket { 
+string customName;
 address bidderAddress;
 address nftContractAddress;
 address currencyTokenAddress;
@@ -57,6 +72,68 @@ bool requireProjectId;
 uint256 projectId;
 uint256 expires;
 
+}
+
+  
+bytes32 constant EIP712DOMAIN_TYPEHASH = keccak256(
+    "EIP712Domain(string contractName,string version,uint256 chainId,address verifyingContract)"
+);
+
+function getDomainTypehash() public pure returns (bytes32) {
+    return EIP712DOMAIN_TYPEHASH;
+}
+
+function getEIP712DomainHash(string memory contractName, string memory version, uint256 chainId, address verifyingContract) public pure returns (bytes32) {
+
+    return keccak256(abi.encode(
+        EIP712DOMAIN_TYPEHASH,
+        keccak256(bytes(contractName)),
+        keccak256(bytes(version)),
+        chainId,
+        verifyingContract
+    ));
+}
+
+bytes32 constant PACKET_TYPEHASH = keccak256(
+"BidPacket(string memory customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires)"
+);
+        
+function getPacketTypehash()  public pure returns (bytes32) {
+    return PACKET_TYPEHASH;
+}
+    
+    
+
+function getPacketHash(string memory customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires) public pure returns (bytes32) {
+return keccak256(abi.encode(
+PACKET_TYPEHASH,
+keccak256(bytes(customName)),
+bidderAddress,
+nftContractAddress,
+currencyTokenAddress,
+currencyTokenAmount,
+requireProjectId,
+projectId,
+expires
+
+));
+}
+
+function getTypedDataHash(string memory customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires) public view returns (bytes32) {
+bytes32 digest = keccak256(abi.encodePacked(
+"\x19\x01",
+getEIP712DomainHash('MyFirstContract','1',_chain_id,address(this)),
+getPacketHash(customName,bidderAddress,nftContractAddress,currencyTokenAddress,currencyTokenAmount,requireProjectId,projectId,expires)
+));
+return digest;
+}
+
+function verifyOffchainSignatureAndDoStuff(string memory customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires,bytes memory offchainSignature) public returns (bool) {
+bytes32 sigHash = getTypedDataHash(customName,bidderAddress,nftContractAddress,currencyTokenAddress,currencyTokenAmount,requireProjectId,projectId,expires);
+address recoveredSignatureSigner = recover(sigHash,offchainSignature);
+require(bidderAddress == recoveredSignatureSigner, 'Invalid signature');
+//DO SOME FUN STUFF HERE
+return true;
 }
 
 }

@@ -2,6 +2,7 @@
     "version":"1",
     "primaryType":"BidPacket",
     "entries":{
+        "customName":"string",
         "bidderAddress":"address",
         "nftContractAddress":"address",
         "currencyTokenAddress":"address",
