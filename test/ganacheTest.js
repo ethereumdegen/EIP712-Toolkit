@@ -46,7 +46,7 @@ let evm = contractData.evm
 describe("EIP712 Contract Testing", function() {
     it("deploys contract", async function() {
 
-      let accounts = await web3.eth.getAccounts()
+      ///let accounts = await web3.eth.getAccounts()
       let chainId = await web3.eth.net.getId()
 
       let primaryAccountAddress = testAccount.publicAddress
@@ -69,6 +69,8 @@ describe("EIP712 Contract Testing", function() {
         projectId:123,
         expires:50000 
     }
+
+    console.log('chainId', chainId)
 
     const typedData = EIP712Utils.getTypedDataFromParams( 
       chainId,  
@@ -106,9 +108,11 @@ describe("EIP712 Contract Testing", function() {
     const sig = ethUtil.ecsign( ethUtil.keccak256(Buffer.from(typedDatahash)  ), privKey );
     //const sig = ethUtil.ecsign( typedDatahash , privKey );
     var signature = ethUtil.toRpcSig(sig.v, sig.r, sig.s);
+    //this signatre is wrong 
 
 
-
+    let recoveredSigner = EIP712Utils.recoverPacketSigner(typedData, signature)
+    console.log('recoveredSigner', recoveredSigner )
       
 
       let args = Object.values(dataValues)
