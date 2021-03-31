@@ -3,10 +3,14 @@
   "version": "0.10.0",
   "description": "A toolkit for web3 code related to EIP712 ",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "admazzola",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "json-beautify": "^1.1.1"
+  }
 }
