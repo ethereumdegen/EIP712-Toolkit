@@ -96,7 +96,7 @@ describe("EIP712 Contract Testing", function() {
     This would output the signature value 
 
 
-     let signResult = await  EIP712Helper.signTypedData( web3, from, stringifiedData  )
+     let signResult = await  EIP712Helper.signTypedData( web3, from, JSON.stringify(typedDatahash)  )
          
     */
 
