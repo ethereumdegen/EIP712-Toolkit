@@ -55,8 +55,8 @@ contract MyFirstContract is ECRecovery {
 
 uint256 _chain_id;
         
-constructor( uint chainId) public { 
-_chain_id = chainId;
+constructor() public { 
+_chain_id = block.chainid;
 }       
         
         
