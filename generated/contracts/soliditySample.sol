@@ -52,12 +52,13 @@ pragma solidity ^0.5.17;
 
 contract MyFirstContract is ECRecovery {
 
- 
-        
-constructor(  ) public { 
- 
-}       
-        
+            uint256 _chain_id;
+            
+                    
+            constructor( uint256 chainId ) public { 
+             _chain_id = chainId;
+            }       
+                    
         
         
 
@@ -74,33 +75,36 @@ uint256 expires;
 }
 
   
-bytes32 constant EIP712DOMAIN_TYPEHASH = keccak256(
-    "EIP712Domain(string contractName,string version,uint256 chainId,address verifyingContract)"
-);
+    bytes32 constant EIP712DOMAIN_TYPEHASH = keccak256(
+        "EIP712Domain(string contractName,string version,uint256 chainId,address verifyingContract)"
+    );
 
-function getDomainTypehash() public pure returns (bytes32) {
-    return EIP712DOMAIN_TYPEHASH;
-}
-
-function getEIP712DomainHash(string memory contractName, string memory version, uint256 chainId, address verifyingContract) public pure returns (bytes32) {
-
-    
-    return keccak256(abi.encode(
-        EIP712DOMAIN_TYPEHASH,
-        keccak256(bytes(contractName)),
-        keccak256(bytes(version)),
-        getChainID(),
-        verifyingContract
-    ));
-}
-
-function getChainID() public pure returns (uint256) {
-    uint256 id;
-    assembly {
-        id := chainid()
+    function getDomainTypehash() public pure returns (bytes32) {
+        return EIP712DOMAIN_TYPEHASH;
     }
-    return id;
-}
+
+    function getEIP712DomainHash(string memory contractName, string memory version, uint256 chainId, address verifyingContract) public view returns (bytes32) {
+
+        return keccak256(abi.encode(
+            EIP712DOMAIN_TYPEHASH,
+            keccak256(bytes(contractName)),
+            keccak256(bytes(version)),
+            getChainID(),
+            verifyingContract
+        ));
+    }
+    
+    
+    
+    function getChainID() public view returns (uint256) {
+        uint256 id;
+        assembly {
+            id := chainid()
+        }
+        return block.chainid;
+    }
+
+
 
 bytes32 constant PACKET_TYPEHASH = keccak256(
 "BidPacket(string customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires)"

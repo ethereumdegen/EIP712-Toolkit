@@ -51,7 +51,7 @@ describe("EIP712 Contract Testing", function() {
       let primaryAccountAddress = testAccount.publicAddress
 
       let myEIP712Contract = await new web3.eth.Contract(abi)
-          .deploy({data: "0x" + evm.bytecode.object, arguments: [chainId]})
+          .deploy({data: "0x" + evm.bytecode.object, arguments: [ chainId ]})
           .send({from:  primaryAccountAddress, gas: 5000000});
   
       let contractAddress = myEIP712Contract.options.address
@@ -125,6 +125,11 @@ describe("EIP712 Contract Testing", function() {
       args.push(signature)
 
       console.log('args', args )
+
+
+      let calcChainId = await myEIP712Contract.methods.getChainID( ).call({from:  primaryAccountAddress })
+      console.log('calcChainId',calcChainId)
+ 
 
       let result = await myEIP712Contract.methods.verifyOffchainSignatureAndDoStuff(...args).send({from:  primaryAccountAddress })
 
