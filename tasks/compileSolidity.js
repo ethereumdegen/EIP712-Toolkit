@@ -47,7 +47,7 @@ const compileContracts = () => {
 
 	if(compiledContractsData.errors && compiledContractsData.errors.length >= 1){
 		console.error( compiledContractsData.errors )
-		return;
+	 
 	}
 
  

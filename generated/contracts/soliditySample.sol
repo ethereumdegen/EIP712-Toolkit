@@ -52,11 +52,10 @@ pragma solidity ^0.5.17;
 
 contract MyFirstContract is ECRecovery {
 
-
-uint256 _chain_id;
+ 
         
-constructor( uint chainId) public { 
-_chain_id = chainId;
+constructor(  ) public { 
+ 
 }       
         
         
@@ -85,13 +84,22 @@ function getDomainTypehash() public pure returns (bytes32) {
 
 function getEIP712DomainHash(string memory contractName, string memory version, uint256 chainId, address verifyingContract) public pure returns (bytes32) {
 
+    
     return keccak256(abi.encode(
         EIP712DOMAIN_TYPEHASH,
         keccak256(bytes(contractName)),
         keccak256(bytes(version)),
-        chainId,
+        getChainID(),
         verifyingContract
     ));
+}
+
+function getChainID() public pure returns (uint256) {
+    uint256 id;
+    assembly {
+        id := chainid()
+    }
+    return id;
 }
 
 bytes32 constant PACKET_TYPEHASH = keccak256(
@@ -122,7 +130,7 @@ expires
 function getTypedDataHash(string memory customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires) public view returns (bytes32) {
 bytes32 digest = keccak256(abi.encodePacked(
 "\x19\x01",
-getEIP712DomainHash('MyFirstContract','1',_chain_id,address(this)),
+getEIP712DomainHash('MyFirstContract','1',getChainID(),address(this)),
 getPacketHash(customName,bidderAddress,nftContractAddress,currencyTokenAddress,currencyTokenAmount,requireProjectId,projectId,expires)
 ));
 return digest;
