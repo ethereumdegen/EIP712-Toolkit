@@ -42,7 +42,18 @@ const input = {
 
 
 const compileContracts = () => {
-	const compiledContracts = JSON.parse(solc.compile(JSON.stringify(input))).contracts;
+	const compiledContractsData = JSON.parse(solc.compile(JSON.stringify(input)));
+
+
+	if(compiledContractsData.errors && compiledContractsData.errors.length >= 1){
+		console.error( compiledContractsData.errors )
+		return;
+	}
+
+ 
+
+	const compiledContracts = compiledContractsData.contracts
+
 
     console.log('compiledContracts:',compiledContracts)
 	for (let contract in compiledContracts) {
