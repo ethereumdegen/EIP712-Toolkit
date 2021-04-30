@@ -12,6 +12,9 @@ import EIP712Utils from '../lib/EIP712Utils.js'
 
 import EIP712Helper from '../lib/EIP712Helper.js'
 
+import {expect} from 'chai'
+
+
 let testAccount = {
   publicAddress: '0x95eDA452256C1190947f9ba1fD19422f0120858a',
   secretKey: "0x31c354f57fc542eba2c56699286723e94f7bd02a4891a0a7f68566c2a2df6795",
@@ -19,7 +22,11 @@ let testAccount = {
 
 }
 
-const ganacheOptions = { gasLimit: 8000000, accounts:[testAccount] };
+const ganacheOptions = { gasLimit: 8000000,
+   accounts:[testAccount],
+   chainId: 1619807114304
+  
+ };
 
 const provider = ganache.provider( ganacheOptions )
 const OPTIONS = {
@@ -48,17 +55,24 @@ describe("EIP712 Contract Testing", function() {
       ///let accounts = await web3.eth.getAccounts()
       let chainId = await web3.eth.net.getId()
 
+      console.log('chainId', chainId)
+
+
+
       let primaryAccountAddress = testAccount.publicAddress
 
       let myEIP712Contract = await new web3.eth.Contract(abi)
           .deploy({data: "0x" + evm.bytecode.object, arguments: [ chainId ]})
-          .send({from:  primaryAccountAddress, gas: 5000000});
+          .send({from:  primaryAccountAddress, gas: 5000000 });
   
       let contractAddress = myEIP712Contract.options.address
       console.log("deployed contract at ", contractAddress)
 
 
+      let calcChainId = await myEIP712Contract.methods.getChainID( ).call({from:  primaryAccountAddress })
+      console.log('calcChainId',calcChainId) 
 
+      expect(calcChainId).to.equal(chainId)
       /*
       MAKE SURE YOU CHANGE THIS VARIABLE IF YOU MODIFY eip712-config.json!!!
       */
@@ -75,16 +89,17 @@ describe("EIP712 Contract Testing", function() {
 
 
 
-    console.log('chainId', chainId)
-
+ 
     const typedData = EIP712Utils.getTypedDataFromParams( 
       chainId,  
       contractAddress,
       customConfig,
       dataValues  
     )
+ 
 
     console.log('typedData', (typedData))
+
     let typedDatahash = EIP712Utils.getTypedDataHash(typedData) 
 
      
@@ -127,9 +142,7 @@ describe("EIP712 Contract Testing", function() {
       console.log('args', args )
 
 
-      let calcChainId = await myEIP712Contract.methods.getChainID( ).call({from:  primaryAccountAddress })
-      console.log('calcChainId',calcChainId)
- 
+    
 
       let result = await myEIP712Contract.methods.verifyOffchainSignatureAndDoStuff(...args).send({from:  primaryAccountAddress })
 
