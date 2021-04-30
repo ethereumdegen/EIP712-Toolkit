@@ -51,7 +51,7 @@ describe("EIP712 Contract Testing", function() {
       let primaryAccountAddress = testAccount.publicAddress
 
       let myEIP712Contract = await new web3.eth.Contract(abi)
-          .deploy({data: "0x" + evm.bytecode.object, arguments: [chainId]})
+          .deploy({data: "0x" + evm.bytecode.object, arguments: []})
           .send({from:  primaryAccountAddress, gas: 5000000});
   
       let contractAddress = myEIP712Contract.options.address
