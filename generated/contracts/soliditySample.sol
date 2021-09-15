@@ -50,25 +50,34 @@ pragma solidity ^0.5.17;
 
 
 
-contract MyFirstContract is ECRecovery {
+contract BlockStore is ECRecovery {
+
 
  
         
 constructor(  ) public { 
  
 }       
+
+
+function getChainID() public pure returns (uint256) {
+    uint256 id;
+    assembly {
+        id := chainid()
+    }
+    return id;
+  }
         
         
         
 
-struct BidPacket { 
-string customName;
-address bidderAddress;
+struct OffchainOrder { 
+address orderCreator;
+bool isSellOrder;
 address nftContractAddress;
+uint256 nftTokenId;
 address currencyTokenAddress;
 uint256 currencyTokenAmount;
-bool requireProjectId;
-uint256 projectId;
 uint256 expires;
 
 }
@@ -84,26 +93,17 @@ function getDomainTypehash() public pure returns (bytes32) {
 
 function getEIP712DomainHash(string memory contractName, string memory version, uint256 chainId, address verifyingContract) public pure returns (bytes32) {
 
-    
     return keccak256(abi.encode(
         EIP712DOMAIN_TYPEHASH,
         keccak256(bytes(contractName)),
         keccak256(bytes(version)),
-        getChainID(),
+        chainId,
         verifyingContract
     ));
 }
 
-function getChainID() public pure returns (uint256) {
-    uint256 id;
-    assembly {
-        id := chainid()
-    }
-    return id;
-}
-
 bytes32 constant PACKET_TYPEHASH = keccak256(
-"BidPacket(string customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires)"
+"OffchainOrder(address orderCreator,bool isSellOrder,address nftContractAddress,uint256 nftTokenId,address currencyTokenAddress,uint256 currencyTokenAmount,uint256 expires)"
 );
         
 function getPacketTypehash()  public pure returns (bytes32) {
@@ -112,34 +112,33 @@ function getPacketTypehash()  public pure returns (bytes32) {
     
     
 
-function getPacketHash(string memory customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires) public pure returns (bytes32) {
+function getPacketHash(address orderCreator,bool isSellOrder,address nftContractAddress,uint256 nftTokenId,address currencyTokenAddress,uint256 currencyTokenAmount,uint256 expires) public pure returns (bytes32) {
 return keccak256(abi.encode(
 PACKET_TYPEHASH,
-keccak256(bytes(customName)),
-bidderAddress,
+orderCreator,
+isSellOrder,
 nftContractAddress,
+nftTokenId,
 currencyTokenAddress,
 currencyTokenAmount,
-requireProjectId,
-projectId,
 expires
 
 ));
 }
 
-function getTypedDataHash(string memory customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires) public view returns (bytes32) {
+function getTypedDataHash(address orderCreator,bool isSellOrder,address nftContractAddress,uint256 nftTokenId,address currencyTokenAddress,uint256 currencyTokenAmount,uint256 expires) public view returns (bytes32) {
 bytes32 digest = keccak256(abi.encodePacked(
 "\x19\x01",
-getEIP712DomainHash('MyFirstContract','1',getChainID(),address(this)),
-getPacketHash(customName,bidderAddress,nftContractAddress,currencyTokenAddress,currencyTokenAmount,requireProjectId,projectId,expires)
+getEIP712DomainHash('BlockStore','1',getChainID(),address(this)),
+getPacketHash(orderCreator,isSellOrder,nftContractAddress,nftTokenId,currencyTokenAddress,currencyTokenAmount,expires)
 ));
 return digest;
 }
 
-function verifyOffchainSignatureAndDoStuff(string memory customName,address bidderAddress,address nftContractAddress,address currencyTokenAddress,uint256 currencyTokenAmount,bool requireProjectId,uint256 projectId,uint256 expires,bytes memory offchainSignature) public returns (bool) {
-bytes32 sigHash = getTypedDataHash(customName,bidderAddress,nftContractAddress,currencyTokenAddress,currencyTokenAmount,requireProjectId,projectId,expires);
+function verifyOffchainSignatureAndDoStuff(address orderCreator,bool isSellOrder,address nftContractAddress,uint256 nftTokenId,address currencyTokenAddress,uint256 currencyTokenAmount,uint256 expires,bytes memory offchainSignature) public view returns (bool) {
+bytes32 sigHash = getTypedDataHash(orderCreator,isSellOrder,nftContractAddress,nftTokenId,currencyTokenAddress,currencyTokenAmount,expires);
 address recoveredSignatureSigner = recover(sigHash,offchainSignature);
-require(bidderAddress == recoveredSignatureSigner, 'Invalid signature');
+require(orderCreator == recoveredSignatureSigner, 'Invalid signature');
 //DO SOME FUN STUFF HERE
 return true;
 }

@@ -28,7 +28,7 @@ const OPTIONS = {
   transactionBlockTimeout: 5 
 };
 
- 
+import {expect} from 'chai'
  
 const web3 = new Web3(provider, null, OPTIONS);
 
@@ -36,7 +36,7 @@ let customConfigJSON = fs.readFileSync(path.join('eip712-config.json'));
 let customConfig = JSON.parse(customConfigJSON)
 
 //const { abi, evm } = require('../compile');
-let contractJSON = fs.readFileSync(path.join('generated/built/MyFirstContract.json'));
+let contractJSON = fs.readFileSync(path.join('generated/built/BlockStore.json'));
 let contractData = JSON.parse(contractJSON)
 
 let abi = contractData.abi
@@ -50,8 +50,10 @@ describe("EIP712 Contract Testing", function() {
 
       let primaryAccountAddress = testAccount.publicAddress
 
+      console.log('primaryAccountAddress',primaryAccountAddress)
+
       let myEIP712Contract = await new web3.eth.Contract(abi)
-          .deploy({data: "0x" + evm.bytecode.object, arguments: [chainId]})
+          .deploy({data: "0x" + evm.bytecode.object, arguments: [ ]})
           .send({from:  primaryAccountAddress, gas: 5000000});
   
       let contractAddress = myEIP712Contract.options.address
@@ -63,14 +65,13 @@ describe("EIP712 Contract Testing", function() {
       MAKE SURE YOU CHANGE THIS VARIABLE IF YOU MODIFY eip712-config.json!!!
       */
       let dataValues = {
-        customName:"myName",
-        bidderAddress: primaryAccountAddress,
+        orderCreator:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+        isSellOrder:true,
         nftContractAddress:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+        nftTokenId:0,
         currencyTokenAddress:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
         currencyTokenAmount:100,
-        requireProjectId:true,
-        projectId:123,
-        expires:50000 
+        expires:0 
     }
 
 
@@ -120,6 +121,8 @@ describe("EIP712 Contract Testing", function() {
     let recoveredSigner = EIP712Utils.recoverPacketSigner(typedData, signature)
     console.log('recoveredSigner', recoveredSigner )
       
+
+    expect(recoveredSigner.toLowerCase()).to.eql(primaryAccountAddress.toLowerCase())
 
       let args = Object.values(dataValues)
       args.push(signature)

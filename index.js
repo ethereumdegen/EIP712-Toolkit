@@ -26,15 +26,14 @@ function start(){
       /*
       MAKE SURE YOU CHANGE THIS VARIABLE IF YOU MODIFY eip712-config.json!!!
       */     
-    let dataValues = {
-        customName:"myName",
-        bidderAddress:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+    let dataValues = {   
+        orderCreator:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+        isSellOrder:true,
         nftContractAddress:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+        nftTokenId:0,
         currencyTokenAddress:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
         currencyTokenAmount:100,
-        requireProjectId:true,
-        projectId:123,
-        expires:50000 
+        expires:0 
     }
 
 

@@ -1,14 +1,13 @@
-{   "contractName":"MyFirstContract",
+{   "contractName":"BlockStore",
     "version":"1",
-    "primaryType":"BidPacket",
+    "primaryType":"OffchainOrder",
     "entries":{
-        "customName":"string",
-        "bidderAddress":"address",
+        "orderCreator":"address",
+        "isSellOrder":"bool",
         "nftContractAddress":"address",
+        "nftTokenId":"uint256",
         "currencyTokenAddress":"address",
         "currencyTokenAmount":"uint256",
-        "requireProjectId":"bool",
-        "projectId":"uint256",
         "expires":"uint256"
      }
 }
