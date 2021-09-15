@@ -53,20 +53,11 @@ pragma solidity ^0.5.17;
 contract BlockStore is ECRecovery {
 
 
- 
+uint256 _chain_id;
         
-constructor(  ) public { 
- 
+constructor( uint chainId) public { 
+_chain_id = chainId;
 }       
-
-
-function getChainID() public pure returns (uint256) {
-    uint256 id;
-    assembly {
-        id := chainid()
-    }
-    return id;
-  }
         
         
         
@@ -129,7 +120,7 @@ expires
 function getTypedDataHash(address orderCreator,bool isSellOrder,address nftContractAddress,uint256 nftTokenId,address currencyTokenAddress,uint256 currencyTokenAmount,uint256 expires) public view returns (bytes32) {
 bytes32 digest = keccak256(abi.encodePacked(
 "\x19\x01",
-getEIP712DomainHash('BlockStore','1',getChainID(),address(this)),
+getEIP712DomainHash('BlockStore','1',_chain_id,address(this)),
 getPacketHash(orderCreator,isSellOrder,nftContractAddress,nftTokenId,currencyTokenAddress,currencyTokenAmount,expires)
 ));
 return digest;

@@ -53,7 +53,7 @@ describe("EIP712 Contract Testing", function() {
       console.log('primaryAccountAddress',primaryAccountAddress)
 
       let myEIP712Contract = await new web3.eth.Contract(abi)
-          .deploy({data: "0x" + evm.bytecode.object, arguments: [ ]})
+          .deploy({data: "0x" + evm.bytecode.object, arguments: [ chainId ]})
           .send({from:  primaryAccountAddress, gas: 5000000});
   
       let contractAddress = myEIP712Contract.options.address
@@ -65,7 +65,7 @@ describe("EIP712 Contract Testing", function() {
       MAKE SURE YOU CHANGE THIS VARIABLE IF YOU MODIFY eip712-config.json!!!
       */
       let dataValues = {
-        orderCreator:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+        orderCreator:primaryAccountAddress,
         isSellOrder:true,
         nftContractAddress:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
         nftTokenId:0,
